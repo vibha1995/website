@@ -1,24 +1,27 @@
 pipeline {
   agent any
+
   stages {
-
-    stage('Compile') {
-      steps{
-        sh 'mvn clean compile'
+    stage('Checkout') {
+      steps {
+        git 'https://github.com/vibha1995/website.git'
       }
     }
 
-    stage('Test') {
-      steps{
-        sh 'mvn clean test'
+    stage('Build') {
+      steps {
+        sh 'docker build -t website-builder .'
       }
     }
-    
-    stage('Package') {
-      steps{
-        sh 'mvn clean package'
+
+    stage('Publish') {
+      when {
+        branch 'master'
+      }
+      steps {
+        sh 'docker run -d -p 82:80 --name website-container website-builder'
       }
     }
-    
-   }
+  }
 }
+
