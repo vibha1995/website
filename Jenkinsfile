@@ -19,7 +19,7 @@ pipeline {
         branch 'master'
       }
       steps {
-        sh 'docker run -d -p 82:80 --name website-container website-builder'
+        sh 'docker run -itd -p 82:80 --name=testserver website-builder'
       }
     }
   }
